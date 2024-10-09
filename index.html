@@ -1,46 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Holiday</title>
-    <script>
-        async function checkHoliday() {
-            const response = await fetch('https://raw.githubusercontent.com/icps0610/holiday/refs/heads/main/holiday.json');
-            const holidayData = await response.json();
-            
-            // 獲取當前的日期
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth(); // 月份是 0 到 11
-            const day = today.getDate() - 1; // 讓天數變成 0 基準
-            const dayOfWeek = today.getDay(); // 0 是星期日，6 是星期六
-
-            let isHoliday = "false"; // 預設為非假日
-
-            // 確認該年份是否有資料
-            if (holidayData[year]) {
-                const monthData = holidayData[year][month];
-
-                // 確認該月份是否有資料並檢查當天是否放假
-                if (monthData && day < monthData.length) {
-                    isHoliday = monthData[day] === '1' ? 'true' : 'false';
-                } else {
-                    // 若資料超出範圍，依照星期六日判斷
-                    isHoliday = (dayOfWeek === 0 || dayOfWeek === 6) ? 'true' : 'false';
-                }
-            } else {
-                // 若無該年份資料，依照星期六日判斷
-                isHoliday = (dayOfWeek === 0 || dayOfWeek === 6) ? 'true' : 'false';
-            }
-
-            document.getElementById("result").innerText = `${isHoliday}`;
-        }
-        
-        window.onload = checkHoliday;
-    </script>
 </head>
+
 <body>
     <h1 id="result"></h1>
 </body>
+
+
+
+<script>
+async function checkHoliday() {
+    const response = await fetch('https://raw.githubusercontent.com/icps0610/holiday/refs/heads/main/holiday.json');
+    const holidayData = await response.json();
+
+    // 獲取當前的日期
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth(); // 月份是 0 到 11
+    const day = today.getDate() - 1; // 讓天數變成 0 基準
+    const dayOfWeek = today.getDay(); // 0 是星期日，6 是星期六
+
+    let isHoliday = "false"; // 預設為非假日
+
+    // 確認該年份是否有資料
+    if (holidayData[year]) {
+        const monthData = holidayData[year][month];
+
+        // 確認該月份是否有資料並檢查當天是否放假
+        if (monthData && day < monthData.length) {
+            isHoliday = monthData[day] === '1' ? 'true' : 'false';
+        } else {
+            // 若資料超出範圍，依照星期六日判斷
+            isHoliday = (dayOfWeek === 0 || dayOfWeek === 6) ? 'true' : 'false';
+        }
+    } else {
+        // 若無該年份資料，依照星期六日判斷
+        isHoliday = (dayOfWeek === 0 || dayOfWeek === 6) ? 'true' : 'false';
+    }
+
+    document.getElementById("result").innerText = `${isHoliday}`;
+}
+
+window.onload = checkHoliday;
+</script>
+
 </html>
